@@ -1,3 +1,5 @@
+library (ggplot2)
+
 # setwd("/Users/ba25714/coursera/ExploratoryDataAnalysis/CourseProject")
 
 # https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip
@@ -12,10 +14,12 @@ if (!file.exists("summarySCC_PM25.rds") & !file.exists("Source_Classification_Co
 NEI <- readRDS("summarySCC_PM25.rds")
 
 baltimoreCity <- subset(NEI,fips=="24510")
-aggregatedEmissionsByYear <- aggregate(Emissions ~ year, baltimoreCity, sum)
+aggregatedEmissionsByYearType <- aggregate(Emissions ~ year + type, baltimoreCity, sum)
 
-png('plot2.png')
-barplot(height=aggregatedEmissionsByYear$Emissions, names.arg=aggregatedEmissionsByYear$year,
-        xlab="years", ylab=expression('total PM'[2.5]*' emission'),
-        main=expression('Total PM'[2.5]*' Baltimore City emissions per year'))
-dev.off()
+g <- ggplot(aggregatedEmissionsByYearType, aes(year, Emissions, color = type))
+
+g <- g + geom_line() +
+  xlab("year") +
+  ylab(expression('Total PM'[2.5]*" Emissions")) +
+  ggtitle('Total Emissions in Baltimore City, Maryland from 1999 to 2008')
+print(g)
