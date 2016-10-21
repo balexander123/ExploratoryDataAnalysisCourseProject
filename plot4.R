@@ -12,17 +12,14 @@ if (!file.exists("summarySCC_PM25.rds") & !file.exists("Source_Classification_Co
 
 # Read data
 NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
 
-baltimoreCity <- subset(NEI,fips=="24510")
-aggregatedEmissionsByYearType <- aggregate(Emissions ~ year + type, baltimoreCity, sum)
+coalSubset <- NEI[grepl("coal", SCC$Short.Name, ignore.case=TRUE),]
+aggregatedTotalByYear <- aggregate(Emissions ~ year, coalSubset, sum)
 
-png('plot3.png')
-
-g <- ggplot(aggregatedEmissionsByYearType, aes(year, Emissions, color = type))
-g <- g + geom_line() +
+g <- ggplot(aggregatedTotalByYear, aes(factor(year), Emissions))
+g <- g + geom_bar(stat="identity") +
   xlab("year") +
   ylab(expression('Total PM'[2.5]*" Emissions")) +
-  ggtitle('Total Emissions in Baltimore City, Maryland from 1999 to 2008')
+  ggtitle('Total Emissions from coal sources 1999 to 2008')
 print(g)
-
-dev.off()
