@@ -17,9 +17,13 @@ SCC <- readRDS("Source_Classification_Code.rds")
 coalSubset <- NEI[grepl("coal", SCC$Short.Name, ignore.case=TRUE),]
 aggregatedTotalByYear <- aggregate(Emissions ~ year, coalSubset, sum)
 
+png('plot4.png')
+
 g <- ggplot(aggregatedTotalByYear, aes(factor(year), Emissions))
 g <- g + geom_bar(stat="identity") +
   xlab("year") +
   ylab(expression('Total PM'[2.5]*" Emissions")) +
   ggtitle('Total Emissions from coal sources 1999 to 2008')
 print(g)
+
+dev.off()
