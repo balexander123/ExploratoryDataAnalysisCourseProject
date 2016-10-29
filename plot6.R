@@ -1,7 +1,5 @@
 library (ggplot2)
 
-# setwd("/Users/ba25714/coursera/ExploratoryDataAnalysis/CourseProject")
-
 # https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip
 
 if (!file.exists("summarySCC_PM25.rds") & !file.exists("Source_Classification_Code.rds")) {
@@ -28,10 +26,12 @@ vehiclesLA$city <- "Los Angeles County"
 
 #combine
 allVehicles <- rbind(vehiclesBaltimore,vehiclesLA)
+aggregatedTotalsByYearAndCity <- aggregate(Emissions ~ year + city, allVehicles, sum)
 
-ggp <- ggplot(allVehicles, aes(x=factor(year), y=Emissions, fill=city,label = round(Emissions,2))) +
-  geom_bar(stat="identity") + 
-  facet_grid(city~., scales="free") +
+ggp <- ggplot(aggregatedTotalsByYearAndCity, aes(x=factor(year), y=Emissions, fill=year)) +
+  geom_bar(aes(fill = year), stat="identity") +
+  geom_text(aes(label=round(Emissions,0)), hjust = 0.5, vjust = -0.3) +
+  facet_grid(city~.) +
   ylab(expression("total PM"[2.5]*" emissions in tons")) + 
   xlab("year") +
   ggtitle(expression("Motor vehicle emission Baltimore vs Los Angeles in tons"))
@@ -39,13 +39,5 @@ ggp <- ggplot(allVehicles, aes(x=factor(year), y=Emissions, fill=city,label = ro
 print(ggp)
 
 #png('plot6.png')
-
-# p1 <- ggplot(aggregatedTotalByYear, aes(factor(year), Emissions))
-# p1 <- p1 + geom_bar(stat="identity") +
-#   xlab("year") +
-#   ylab(expression('Total PM'[2.5]*" Emissions")) +
-#   ggtitle('Total Emissions from auto sources in Baltimore City 1999 to 2008')
-# 
-# print(p1)
 
 #dev.off()
