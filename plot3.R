@@ -1,7 +1,5 @@
 library (ggplot2)
 
-# setwd("/Users/ba25714/coursera/ExploratoryDataAnalysis/CourseProject")
-
 # https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip
 
 if (!file.exists("summarySCC_PM25.rds") & !file.exists("Source_Classification_Code.rds")) {
@@ -23,6 +21,7 @@ g <- g + geom_line() +
   xlab("year") +
   ylab(expression('Total PM'[2.5]*" Emissions")) +
   ggtitle('Total Emissions in Baltimore City, Maryland from 1999 to 2008')
+
 print(g)
 
 dev.off()

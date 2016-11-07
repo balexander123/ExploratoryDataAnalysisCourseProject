@@ -36,8 +36,8 @@ ggp <- ggplot(aggregatedTotalsByYearAndCity, aes(x=factor(year), y=Emissions, fi
   xlab("year") +
   ggtitle(expression("Motor vehicle emission Baltimore vs Los Angeles in tons"))
 
+png('plot6.png')
+
 print(ggp)
 
-#png('plot6.png')
-
-#dev.off()
+dev.off()
